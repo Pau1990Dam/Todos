@@ -13,6 +13,7 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
 import org.ecaib.todos.provider.notes.NotesColumns;
+import org.ecaib.todos.provider.notes.NotesSelection;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -35,26 +36,22 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
                 getContext(),
                 R.layout.notes_row,
                 null,
-                new String[] { "title" },
+                new String[] { NotesColumns.TITLE },
                 new int[] { R.id.tvTitle },
                 0
         );
 
         lvTodos.setAdapter(adapter);
 
+        getLoaderManager().initLoader(0, null, this);
+
         return view;
     }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new CursorLoader(
-                getContext(),
-                NotesColumns.CONTENT_URI,
-                null,
-                null,
-                null,
-                null
-        );
+        NotesSelection where = new NotesSelection();
+        return new CursorLoader(getContext(), where.uri(), null, where.sel(), where.args(), null);
     }
 
     @Override
