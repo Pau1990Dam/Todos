@@ -27,6 +27,12 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="org.ecaib.todos.MainActivity" />
         </activity>
+
+        <provider
+            android:name="org.ecaib.todos.provider.NotesProvider"
+            android:authorities="org.ecaib.todos.provider"
+            android:exported="false" />
+
     </application>
 
 </manifest>
