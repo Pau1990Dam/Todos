@@ -12,13 +12,14 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
-import org.ecaib.todos.provider.NotesProvider;
 import org.ecaib.todos.provider.notes.NotesColumns;
 
 /**
  * A placeholder fragment containing a simple view.
  */
 public class DetailActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+
+    private SimpleCursorAdapter adapter;
 
     public DetailActivityFragment() {
     }
@@ -30,7 +31,7 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
 
         ListView lvTodos = (ListView) view.findViewById(R.id.toolbar);
 
-        SimpleCursorAdapter adapter = new SimpleCursorAdapter(
+        adapter = new SimpleCursorAdapter(
                 getContext(),
                 R.layout.notes_row,
                 null,
@@ -59,11 +60,12 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
 
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        adapter.swapCursor(data);
 
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
-
+        adapter.swapCursor(null);
     }
 }
