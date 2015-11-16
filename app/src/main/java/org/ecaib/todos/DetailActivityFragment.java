@@ -17,7 +17,7 @@ import org.ecaib.todos.provider.notes.NotesColumns;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class DetailActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class DetailActivityFragment extends Fragment {
 
     private SimpleCursorAdapter adapter;
 
@@ -29,43 +29,7 @@ public class DetailActivityFragment extends Fragment implements LoaderManager.Lo
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_detail, container, false);
 
-        ListView lvTodos = (ListView) view.findViewById(R.id.toolbar);
-
-        adapter = new SimpleCursorAdapter(
-                getContext(),
-                R.layout.notes_row,
-                null,
-                new String[] { "title" },
-                new int[] { R.id.tvTitle },
-                0
-        );
-
-        lvTodos.setAdapter(adapter);
-        getLoaderManager().initLoader(0, null, this);
-
         return view;
     }
 
-    @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        return new CursorLoader(
-                getContext(),
-                NotesColumns.CONTENT_URI,
-                null,
-                null,
-                null,
-                null
-        );
-    }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        adapter.swapCursor(data);
-
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-        adapter.swapCursor(null);
-    }
 }
