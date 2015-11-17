@@ -56,9 +56,9 @@ public class DetailActivityFragment extends Fragment {
 
             if (cursor != null) {
                 //Ens situem en el primer valor
-                cursor.moveToNext();
-
                 NotesCursor notesCursor = new NotesCursor(cursor);
+
+                notesCursor.moveToNext();
 
                 etTitle.setText(notesCursor.getTitle());
                 etDescription.setText(notesCursor.getDescription());
