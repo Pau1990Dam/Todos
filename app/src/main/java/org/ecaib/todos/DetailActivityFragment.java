@@ -104,16 +104,24 @@ public class DetailActivityFragment extends Fragment {
         values.putDescription(etDescription.getText().toString());
 
         if (itemId == -1) {
-            getContext().getContentResolver().insert(
-                    NotesColumns.CONTENT_URI,
-                    values.values());
+            insertItem(values);
         } else {
-            getContext().getContentResolver().update(
-                    NotesColumns.CONTENT_URI,
-                    values.values(),
-                    NotesColumns._ID + " = ?",
-                    new String[]{String.valueOf(itemId)});
+            updateItem(values);
         }
+    }
+
+    private void updateItem(NotesContentValues values) {
+        getContext().getContentResolver().update(
+                NotesColumns.CONTENT_URI,
+                values.values(),
+                NotesColumns._ID + " = ?",
+                new String[]{String.valueOf(itemId)});
+    }
+
+    private void insertItem(NotesContentValues values) {
+        getContext().getContentResolver().insert(
+                NotesColumns.CONTENT_URI,
+                values.values());
     }
 
     private void deleteItem() {
