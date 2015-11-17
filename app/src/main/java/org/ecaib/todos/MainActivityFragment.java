@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
+import org.ecaib.todos.provider.NotesProvider;
 import org.ecaib.todos.provider.notes.NotesColumns;
 import org.ecaib.todos.provider.notes.NotesSelection;
 
@@ -44,7 +45,6 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
         lvTodos.setAdapter(adapter);
 
         getLoaderManager().initLoader(0, null, this);
-
         return view;
     }
 
