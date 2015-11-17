@@ -1,5 +1,6 @@
 package org.ecaib.todos;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -9,6 +10,7 @@ import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
@@ -44,6 +46,14 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
 
         lvTodos.setAdapter(adapter);
 
+        lvTodos.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent i = new Intent(getContext(), DetailActivity.class);
+                i.putExtra("item_id", id);
+                startActivity(i);
+            }
+        });
         getLoaderManager().initLoader(0, null, this);
         return view;
     }

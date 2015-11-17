@@ -1,7 +1,9 @@
 package org.ecaib.todos;
 
+import android.content.Intent;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -10,9 +12,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import org.ecaib.todos.provider.NotesProvider;
-import org.ecaib.todos.provider.notes.NotesColumns;
 import org.ecaib.todos.provider.notes.NotesContentValues;
+import org.ecaib.todos.provider.notes.NotesCursor;
+import org.ecaib.todos.provider.notes.NotesSelection;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -21,6 +23,8 @@ public class DetailActivityFragment extends Fragment {
 
     private TextView etTitle;
     private TextView etDescription;
+    private long id = -1;
+    private NotesSelection where;
 
     public DetailActivityFragment() {
     }
@@ -39,6 +43,19 @@ public class DetailActivityFragment extends Fragment {
 
         etTitle = (TextView) view.findViewById(R.id.etTitle);
         etDescription = (TextView) view.findViewById(R.id.etDescription);
+
+        Intent i = getActivity().getIntent();
+        id = i.getLongExtra("item_id", -1);
+        if(id != -1){
+            where = new NotesSelection();
+            where.id(id);
+            NotesCursor cursor = where.query(getContext());
+
+            cursor.moveToNext();
+
+            etTitle.setText(cursor.getTitle());
+            etDescription.setText(cursor.getDescription());
+        }
 
         return view;
     }
@@ -74,9 +91,12 @@ public class DetailActivityFragment extends Fragment {
     private void saveItem() {
         NotesContentValues values = new NotesContentValues();
         values.putTitle(etTitle.getText().toString());
-        values.putDescription(etTitle.getText().toString());
+        values.putDescription(etDescription.getText().toString());
 
-        values.insert(getContext().getContentResolver());
+        if(id == -1)
+            values.insert(getContext());
+        else
+            values.update(getContext(), where);
     }
 
 }
