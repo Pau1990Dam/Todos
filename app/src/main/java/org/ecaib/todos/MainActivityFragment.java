@@ -1,12 +1,8 @@
 package org.ecaib.todos;
 
 import android.content.Intent;
-import android.database.Cursor;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.content.Loader;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,14 +10,14 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
-import org.ecaib.todos.provider.NotesProvider;
 import org.ecaib.todos.provider.notes.NotesColumns;
+import org.ecaib.todos.provider.notes.NotesCursor;
 import org.ecaib.todos.provider.notes.NotesSelection;
 
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MainActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>{
+public class MainActivityFragment extends Fragment {
 
     private SimpleCursorAdapter adapter;
 
@@ -54,25 +50,18 @@ public class MainActivityFragment extends Fragment implements LoaderManager.Load
                 startActivity(i);
             }
         });
-        getLoaderManager().initLoader(0, null, this);
         return view;
     }
 
     @Override
-    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+    public void onStart() {
+        super.onStart();
+        refresh();
+    }
+
+    private void refresh() {
         NotesSelection where = new NotesSelection();
-        return new CursorLoader(getContext(), where.uri(), null, where.sel(), where.args(), null);
+        NotesCursor cursor = where.query(getContext());
+        adapter.swapCursor(cursor);
     }
-
-    @Override
-    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
-        adapter.swapCursor(data);
-
-    }
-
-    @Override
-    public void onLoaderReset(Loader<Cursor> loader) {
-        adapter.swapCursor(null);
-    }
-
 }
