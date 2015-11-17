@@ -23,7 +23,7 @@ public class DetailActivityFragment extends Fragment {
 
     private TextView etTitle;
     private TextView etDescription;
-    private long id = -1;
+    private long itemId = -1;
     private NotesSelection where;
 
     public DetailActivityFragment() {
@@ -45,10 +45,10 @@ public class DetailActivityFragment extends Fragment {
         etDescription = (TextView) view.findViewById(R.id.etDescription);
 
         Intent i = getActivity().getIntent();
-        id = i.getLongExtra("item_id", -1);
-        if(id != -1){
+        itemId = i.getLongExtra("item_id", -1);
+        if(itemId != -1){
             where = new NotesSelection();
-            where.id(id);
+            where.id(itemId);
             NotesCursor cursor = where.query(getContext());
 
             cursor.moveToNext();
@@ -75,13 +75,15 @@ public class DetailActivityFragment extends Fragment {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.miCancel) {
-            getActivity().finish();
-            return true;
-        }
-
         if (id == R.id.miOK) {
             saveItem();
+            getActivity().finish();
+        }
+
+        if (id == R.id.miCancel) {
+            if(itemId != -1) {
+                deleteItem();
+            }
             getActivity().finish();
         }
 
@@ -93,10 +95,13 @@ public class DetailActivityFragment extends Fragment {
         values.putTitle(etTitle.getText().toString());
         values.putDescription(etDescription.getText().toString());
 
-        if(id == -1)
+        if(itemId == -1)
             values.insert(getContext());
         else
             values.update(getContext(), where);
     }
 
+    private void deleteItem() {
+        where.delete(getContext());
+    }
 }
