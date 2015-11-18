@@ -33,10 +33,10 @@ public class MainActivityFragment extends Fragment {
         adapter = new SimpleCursorAdapter(
                 getContext(),
                 R.layout.notes_row,
-                null,
-                new String[] { NotesColumns.TITLE },
-                new int[] { R.id.tvTitle },
-                0
+                null,//cursor
+                new String[] { NotesColumns.TITLE },//campos
+                new int[] { R.id.tvTitle },//donde tiene que ir el campo
+                0//Más tarde lo sabremos
         );
 
         lvTodos.setAdapter(adapter);
@@ -45,7 +45,7 @@ public class MainActivityFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent i = new Intent(getContext(), DetailActivity.class);
-                i.putExtra("item_id", id);
+                i.putExtra("item_id", id);//Pasamos el id de la fila
                 startActivity(i);
             }
         });
@@ -61,11 +61,11 @@ public class MainActivityFragment extends Fragment {
     private void refresh() {
         Cursor cursor = getContext().getContentResolver().query(
                 NotesColumns.CONTENT_URI,
+                null,// Equivalente al Select (columna)
+                null,//Equivalente al Where
                 null,
-                null,
-                null,
-                null
+                null//Order
         );
-        adapter.swapCursor(cursor);
+        adapter.swapCursor(cursor);//usa este cursor
     }
 }

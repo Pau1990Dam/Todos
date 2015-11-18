@@ -44,7 +44,7 @@ public class DetailActivityFragment extends Fragment {
 
         Intent i = getActivity().getIntent();
         itemId = i.getLongExtra("item_id", -1);
-        if (itemId != -1) {
+        if (itemId != -1) {//Si da -1 es xq el intent no había sido creado antes
             loadItem();
         }
 
@@ -81,8 +81,8 @@ public class DetailActivityFragment extends Fragment {
         return super.onOptionsItemSelected(item);
     }
 
-    private void saveItem() {
-        NotesContentValues values = new NotesContentValues();
+    private void saveItem() {//Gestiona la funcion de actualizar y guardar
+        NotesContentValues values = new NotesContentValues();//Creamos el objeto q vamos a guardar. El primo del cursor. Es para meter info
         values.putTitle(etTitle.getText().toString());
         values.putDescription(etDescription.getText().toString());
 
@@ -97,16 +97,16 @@ public class DetailActivityFragment extends Fragment {
         Cursor cursor = getContext().getContentResolver().query(
                 NotesColumns.CONTENT_URI,
                 null,
-                NotesColumns._ID + " = ?",
+                NotesColumns._ID + " = ?",//Esto es para substituir los caracteres no conocidos o especiales xa ejecutar comandos por interrogante
                 new String[]{String.valueOf(itemId)},
                 null
         );
 
-        if (cursor != null) {
-            //Ens situem en el primer valor
-            cursor.moveToNext();
+        if (cursor != null) {//Si el cursor me ha devuelto algo...
+            //Ens situem en el primer valor q  es -1, es decir desde antes de los resultados.
+            cursor.moveToNext();//si no se hace esto x lo expuesto antes el programa casca
 
-            String title = cursor.getString(cursor.getColumnIndex(NotesColumns.TITLE));
+            String title = cursor.getString(cursor.getColumnIndex(NotesColumns.TITLE));//Pilla el indice en formato string
             etTitle.setText(title);
             String description = cursor.getString(cursor.getColumnIndex(NotesColumns.DESCRIPTION));
             etDescription.setText(description);
