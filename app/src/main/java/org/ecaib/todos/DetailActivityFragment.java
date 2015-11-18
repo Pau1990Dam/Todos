@@ -106,8 +106,10 @@ public class DetailActivityFragment extends Fragment {
             //Ens situem en el primer valor
             cursor.moveToNext();
 
-            etTitle.setText(cursor.getString(cursor.getColumnIndex(NotesColumns.TITLE)));
-            etDescription.setText(cursor.getString(cursor.getColumnIndex(NotesColumns.DESCRIPTION)));
+            String title = cursor.getString(cursor.getColumnIndex(NotesColumns.TITLE));
+            etTitle.setText(title);
+            String description = cursor.getString(cursor.getColumnIndex(NotesColumns.DESCRIPTION));
+            etDescription.setText(description);
         }
     }
 
