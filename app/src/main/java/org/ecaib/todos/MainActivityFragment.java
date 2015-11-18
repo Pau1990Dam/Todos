@@ -1,6 +1,7 @@
 package org.ecaib.todos;
 
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -11,8 +12,6 @@ import android.widget.ListView;
 import android.widget.SimpleCursorAdapter;
 
 import org.ecaib.todos.provider.notes.NotesColumns;
-import org.ecaib.todos.provider.notes.NotesCursor;
-import org.ecaib.todos.provider.notes.NotesSelection;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -60,8 +59,13 @@ public class MainActivityFragment extends Fragment {
     }
 
     private void refresh() {
-        NotesSelection where = new NotesSelection();
-        NotesCursor cursor = where.query(getContext());
+        Cursor cursor = getContext().getContentResolver().query(
+                NotesColumns.CONTENT_URI,
+                null,
+                null,
+                null,
+                null
+        );
         adapter.swapCursor(cursor);
     }
 }
