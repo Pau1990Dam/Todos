@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import org.ecaib.todos.provider.notes.NotesColumns;
 import org.ecaib.todos.provider.notes.NotesContentValues;
-import org.ecaib.todos.provider.notes.NotesCursor;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -46,23 +45,7 @@ public class DetailActivityFragment extends Fragment {
         Intent i = getActivity().getIntent();
         itemId = i.getLongExtra("item_id", -1);
         if (itemId != -1) {
-            Cursor cursor = getContext().getContentResolver().query(
-                    NotesColumns.CONTENT_URI,
-                    null,
-                    NotesColumns._ID + " = ?",
-                    new String[]{String.valueOf(itemId)},
-                    null
-            );
-
-            if (cursor != null) {
-                //Ens situem en el primer valor
-                NotesCursor notesCursor = new NotesCursor(cursor);
-
-                notesCursor.moveToNext();
-
-                etTitle.setText(notesCursor.getTitle());
-                etDescription.setText(notesCursor.getDescription());
-            }
+            loadItem();
         }
 
         return view;
@@ -107,6 +90,24 @@ public class DetailActivityFragment extends Fragment {
             insertItem(values);
         } else {
             updateItem(values);
+        }
+    }
+
+    private void loadItem() {
+        Cursor cursor = getContext().getContentResolver().query(
+                NotesColumns.CONTENT_URI,
+                null,
+                NotesColumns._ID + " = ?",
+                new String[]{String.valueOf(itemId)},
+                null
+        );
+
+        if (cursor != null) {
+            //Ens situem en el primer valor
+            cursor.moveToNext();
+
+            etTitle.setText(cursor.getString(cursor.getColumnIndex(NotesColumns.TITLE)));
+            etDescription.setText(cursor.getString(cursor.getColumnIndex(NotesColumns.DESCRIPTION)));
         }
     }
 
