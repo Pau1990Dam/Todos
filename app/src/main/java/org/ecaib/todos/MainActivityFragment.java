@@ -1,9 +1,12 @@
 package org.ecaib.todos;
 
+import android.content.CursorLoader;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.LoaderManager;
+import android.support.v4.content.Loader;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,7 +19,7 @@ import org.ecaib.todos.provider.notes.NotesColumns;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MainActivityFragment extends Fragment {
+public class MainActivityFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private SimpleCursorAdapter adapter;
 
@@ -49,6 +52,9 @@ public class MainActivityFragment extends Fragment {
                 startActivity(i);
             }
         });
+
+        //inicializamos el Loader
+        getLoaderManager().initLoader(0,null,this);//El this es xa q modifique daties en este fragment
         return view;
     }
 
@@ -59,13 +65,36 @@ public class MainActivityFragment extends Fragment {
     }
 
     private void refresh() {
+        /*
         Cursor cursor = getContext().getContentResolver().query(
-                NotesColumns.CONTENT_URI,
+                NotesColumns.CONTENT_URI,//tabla
                 null,// Equivalente al Select (columna)
                 null,//Equivalente al Where
                 null,
                 null//Order
         );
         adapter.swapCursor(cursor);//usa este cursor
+        */
+    }
+
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return new android.support.v4.content.CursorLoader(getContext(),
+                NotesColumns.CONTENT_URI,//tabla
+                null,// Equivalente al Select (columna)
+                null,//Equivalente al Where
+                null,
+                null//Order
+        );
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader,Cursor data) {
+        adapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        adapter.swapCursor(null);
     }
 }
